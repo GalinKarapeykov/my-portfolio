@@ -50,9 +50,9 @@ var translations = {
     "err-name": "Please enter your name",
     "err-email": "Please enter a valid email",
     "err-message": "Please enter a message",
-    "success-title": "Message Sent!",
-    "success-desc": "Thanks for reaching out. I'll get back to you soon.",
-    "form-reset": "Send Another Message",
+    "success-title": "Thanks for your interest!",
+    "success-desc": "This form is a demo. To reach me, email me directly or find me on GitHub below.",
+    "form-reset": "Try Again",
     "github-btn": "Find me on GitHub",
     "footer": 'Built by <strong>Galin Karapeykov</strong> with AI-Assisted Development &bull; 2026'
   },
@@ -106,9 +106,9 @@ var translations = {
     "err-name": "\u041c\u043e\u043b\u044f, \u0432\u044a\u0432\u0435\u0434\u0438 \u0438\u043c\u0435\u0442\u043e \u0441\u0438",
     "err-email": "\u041c\u043e\u043b\u044f, \u0432\u044a\u0432\u0435\u0434\u0438 \u0432\u0430\u043b\u0438\u0434\u0435\u043d \u0438\u043c\u0435\u0439\u043b",
     "err-message": "\u041c\u043e\u043b\u044f, \u0432\u044a\u0432\u0435\u0434\u0438 \u0441\u044a\u043e\u0431\u0449\u0435\u043d\u0438\u0435",
-    "success-title": "\u0421\u044a\u043e\u0431\u0449\u0435\u043d\u0438\u0435\u0442\u043e \u0435 \u0438\u0437\u043f\u0440\u0430\u0442\u0435\u043d\u043e!",
-    "success-desc": "\u0411\u043b\u0430\u0433\u043e\u0434\u0430\u0440\u044f! \u0429\u0435 \u0441\u0435 \u0441\u0432\u044a\u0440\u0436\u0430 \u0441 \u0442\u0435\u0431 \u0441\u043a\u043e\u0440\u043e.",
-    "form-reset": "\u0418\u0437\u043f\u0440\u0430\u0442\u0438 \u043d\u043e\u0432\u043e \u0441\u044a\u043e\u0431\u0449\u0435\u043d\u0438\u0435",
+    "success-title": "\u0411\u043b\u0430\u0433\u043e\u0434\u0430\u0440\u044f \u0437\u0430 \u0438\u043d\u0442\u0435\u0440\u0435\u0441\u0430!",
+    "success-desc": "\u0422\u0430\u0437\u0438 \u0444\u043e\u0440\u043c\u0430 \u0435 \u0434\u0435\u043c\u043e. \u0417\u0430 \u0434\u0430 \u0441\u0435 \u0441\u0432\u044a\u0440\u0436\u0435\u0442\u0435 \u0441 \u043c\u0435\u043d, \u043f\u0438\u0448\u0435\u0442\u0435 \u043c\u0438 \u043d\u0430 \u0438\u043c\u0435\u0439\u043b \u0438\u043b\u0438 \u043c\u0435 \u043d\u0430\u043c\u0435\u0440\u0435\u0442\u0435 \u0432 GitHub.",
+    "form-reset": "\u041e\u043f\u0438\u0442\u0430\u0439 \u043e\u0442\u043d\u043e\u0432\u043e",
     "github-btn": "\u041d\u0430\u043c\u0435\u0440\u0438 \u043c\u0435 \u0432 GitHub",
     "footer": '\u0418\u0437\u0433\u0440\u0430\u0434\u0435\u043d\u043e \u043e\u0442 <strong>\u0413\u0430\u043b\u0438\u043d \u041a\u0430\u0440\u0430\u043f\u0435\u0439\u043a\u043e\u0432</strong> \u0441 AI-\u043f\u043e\u0434\u043f\u043e\u043c\u043e\u0433\u043d\u0430\u0442\u043e \u043f\u0440\u043e\u0433\u0440\u0430\u043c\u0438\u0440\u0430\u043d\u0435 &bull; 2026'
   }
@@ -223,8 +223,11 @@ document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
 
 // ===== ACTIVE NAV LINK ON SCROLL =====
 // Highlights the nav link matching the section currently in view
+// Uses requestAnimationFrame to throttle — only runs once per frame (~60fps)
+// instead of firing dozens of times per scroll event
 var sections = document.querySelectorAll('section[id]');
 var navLinkItems = document.querySelectorAll('.nav-links a');
+var scrollTicking = false;
 
 function updateActiveNav() {
   var scrollPos = window.scrollY + 120;
@@ -243,9 +246,16 @@ function updateActiveNav() {
       });
     }
   });
+
+  scrollTicking = false;
 }
 
-window.addEventListener('scroll', updateActiveNav);
+window.addEventListener('scroll', function () {
+  if (!scrollTicking) {
+    window.requestAnimationFrame(updateActiveNav);
+    scrollTicking = true;
+  }
+});
 updateActiveNav();
 
 // ===== SCROLL REVEAL ANIMATION =====
